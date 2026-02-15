@@ -36,7 +36,7 @@ Optional:
 - `OPENCLAW_GATEWAY_TOKEN` — if not set, the wrapper generates one (not ideal). In a template, set it using a generated secret.
 
 Notes:
-- This template pins OpenClaw to a released version by default via Docker build arg `OPENCLAW_GIT_REF` (override if you want `main`).
+- This template pins OpenClaw via Docker build arg `OPENCLAW_GIT_REF` (default is `main` for the fork; override if you want a tag).
 
 4) Enable **Public Networking** (HTTP). Railway will assign a domain.
    - This service is configured to listen on port `8080` (including custom domains).

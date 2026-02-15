@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-const owner = "openclaw";
+const owner = "adorigi";
 const repo = "openclaw";
 const token = process.env.GITHUB_TOKEN;
 if (!token) {
@@ -34,9 +34,19 @@ function replaceTag(dockerfile, next) {
   return dockerfile.replace(re, `\nARG OPENCLAW_GIT_REF=${next}\n`);
 }
 
-const latest = await gh(`/repos/${owner}/${repo}/releases/latest`);
-const latestTag = latest.tag_name;
-if (!latestTag) throw new Error("No tag_name in latest release response");
+let latestTag = null;
+try {
+  const latest = await gh(`/repos/${owner}/${repo}/releases/latest`);
+  latestTag = latest.tag_name;
+} catch (err) {
+  const msg = err instanceof Error ? err.message : String(err);
+  console.warn(`Release lookup skipped: ${msg}`);
+}
+
+if (!latestTag) {
+  console.log("No releases found; leaving OPENCLAW_GIT_REF unchanged.");
+  process.exit(0);
+}
 
 const dockerPath = "Dockerfile";
 const docker = fs.readFileSync(dockerPath, "utf8");
