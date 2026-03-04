@@ -53,7 +53,7 @@ RUN apt-get update \
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:${PATH}"
 RUN uv python install 3.13
-RUN uv add boto3
+RUN uv pip install --system boto3
 
 # `openclaw update` expects pnpm. Provide it in the runtime image.
 RUN corepack enable && corepack prepare pnpm@10.23.0 --activate
